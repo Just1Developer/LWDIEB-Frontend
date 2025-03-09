@@ -4,7 +4,7 @@ import { axiosInstance } from '@/configuration/axios-config'
 import { env } from '@/env.mjs'
 import { signString } from '@/features/shared/signature'
 
-export const sendWSCommand = async ({ userId, command }: { userId: string, command: string }) => {
+export const sendWSCommand = async ({ userId, command }: { userId: string; command: string }) => {
   await axiosInstance.post('/ws-post', {
     userId,
     command,

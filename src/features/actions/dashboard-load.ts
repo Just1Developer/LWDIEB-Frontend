@@ -1,10 +1,10 @@
 'use server'
 
-import { DoubleSignedSkeletonDashboard, SignedSkeletonDashboard } from '@/lib/types'
-import { toSingleSignedDashboard } from '@/lib/utils'
-import { getDBDashboard, getDBDefaultDashboard, removeDBDashboard, setDBDashboard, setDBDefaultDashboard } from '@/lib/dashboard-db-access'
 import { DEFAULT_DASHBOARD, DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 import { getUserFromAccessJWT } from '@/lib/cookie-reader'
+import { getDBDashboard, getDBDefaultDashboard, removeDBDashboard, setDBDashboard, setDBDefaultDashboard } from '@/lib/dashboard-db-access'
+import { DoubleSignedSkeletonDashboard, SignedSkeletonDashboard } from '@/lib/types'
+import { toSingleSignedDashboard } from '@/lib/utils'
 
 interface DashboardPostReturn {
   status: number
@@ -34,7 +34,7 @@ export const getGlobalDashboard = async (): Promise<SignedSkeletonDashboard> => 
 }
 
 export const postDashboard = async ({ doubleSignedDashboard }: { doubleSignedDashboard: string }): Promise<DashboardPostReturn> => {
-  const { id: userId } = (await getUserFromAccessJWT())
+  const { id: userId } = await getUserFromAccessJWT()
   if (userId === DEFAULT_USER_UUID) {
     console.warn('Failed to post dashboard: ID was default ID on regular post call.')
     return { status: 401, error: 'You are probably not logged in.', msg: '' }
@@ -44,8 +44,8 @@ export const postDashboard = async ({ doubleSignedDashboard }: { doubleSignedDas
 }
 
 export const postGlobalDashboard = async ({ doubleSignedDashboard }: { doubleSignedDashboard: string }): Promise<DashboardPostReturn> => {
-  // todo validation dashboard
-  const { id: userId, admin } = (await getUserFromAccessJWT())
+  // to-do validation dashboard   (to-do because eslint)
+  const { id: userId, admin } = await getUserFromAccessJWT()
   if (userId === DEFAULT_USER_UUID) {
     console.warn('Failed to post dashboard: ID was default ID on regular post call.')
     return { status: 401, error: 'You are probably not logged in.', msg: '' }
@@ -61,7 +61,11 @@ export const postGlobalDashboard = async ({ doubleSignedDashboard }: { doubleSig
 }
 
 export const eraseDashboard = async (): Promise<SignedSkeletonDashboard> => {
-  // todo validate cookies
-  await removeDBDashboard({ userId: (await getUserFromAccessJWT()).id })
+  const { id: userId } = await getUserFromAccessJWT()
+  if (userId !== DEFAULT_USER_UUID) {
+    await removeDBDashboard({ userId })
+  } else {
+    console.warn('Failed to erase dashboard: ID was default ID on regular post call.')
+  }
   return await getGlobalDashboard()
 }

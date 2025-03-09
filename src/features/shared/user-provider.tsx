@@ -1,10 +1,10 @@
+import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 import { BackendUser, DEFAULT_USER_DATA, toUser } from '@/configuration/userdata-config'
 import { updateSelectedTheme } from '@/features/actions/user-post'
 import { AvailableThemes, Theme, User, UserData } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import { useTheme } from 'next-themes'
 import { createContext, ReactNode, useContext, useState } from 'react'
-import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 
 interface UserContextProps {
   loaded: boolean

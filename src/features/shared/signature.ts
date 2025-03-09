@@ -1,10 +1,10 @@
 'use server'
 
+import { env } from '@/env.mjs'
 import { DoubleSignedSkeletonDashboard, EditDashboard, Signature, SignedSkeletonDashboard } from '@/lib/types'
 import { toSingleSignedDashboard, toUnsignedWidget } from '@/lib/utils'
 import { EditWidget, SignedSkeletonWidget } from '@/lib/widget-types'
 import Long from 'long'
-import { env } from '@/env.mjs'
 
 export const signDashboard = async ({ dashboard }: { dashboard: EditDashboard }): Promise<string> => {
   const skeleton: SignedSkeletonDashboard = {
@@ -53,6 +53,8 @@ export const verifyDashboardSignature = async ({ dashboard }: { dashboard: Doubl
   )
 }
 
+// We need async for exporting because this file has 'use server'
+// eslint-disable-next-line @typescript-eslint/require-await
 export const signString = async ({ string }: { string: string }) => calculateSignature({ data: string })
 
 const calculateSignature = ({ data }: { data: string }) => {

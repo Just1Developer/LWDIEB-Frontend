@@ -1,5 +1,5 @@
-import { AvailableThemes, Theme, User, UserData } from '@/lib/types'
 import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
+import { AvailableThemes, Theme, User, UserData } from '@/lib/types'
 
 export interface BackendUser {
   name: string
@@ -43,7 +43,7 @@ export const DEFAULT_DARK_THEME: Theme = {
 
 export const DEFAULT_THEMES = JSON.stringify({
   lightTheme: DEFAULT_LIGHT_THEME,
-  darkTheme: DEFAULT_DARK_THEME
+  darkTheme: DEFAULT_DARK_THEME,
 })
 
 // Copy of Theme, but everything is optional
@@ -83,7 +83,7 @@ export const toUser = ({ dataUser }: { dataUser: BackendUser }): UserData => {
     const parsed = JSON.parse(dataUser.theme)
     dataThemes = {
       lightTheme: parsed.darkTheme ?? DEFAULT_LIGHT_THEME,
-      darkTheme: parsed.darkTheme ?? DEFAULT_DARK_THEME
+      darkTheme: parsed.darkTheme ?? DEFAULT_DARK_THEME,
     }
   } catch (_) {
     dataThemes = {

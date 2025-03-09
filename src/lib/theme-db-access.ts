@@ -1,19 +1,19 @@
 'use server'
 
-import { db } from '@/lib/db'
 import { DEFAULT_THEMES } from '@/configuration/userdata-config'
+import { db } from '@/lib/db'
 import { AvailableThemes } from '@/lib/types'
 
 export const getDBTheme = async ({ userId }: { userId: string }) => {
-  const { themeConfig } = await db.themes.findFirst({ where: { userId }}) ?? { dashboard: undefined }
+  const { themeConfig } = (await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
   if (!themeConfig) {
     return DEFAULT_THEMES
   }
   return themeConfig
 }
 
-export const setDBTheme = async ({ userId, themes }: { userId: string, themes: string }) => {
-  const contains = await db.themes.count({ where: { userId }}) > 0
+export const setDBTheme = async ({ userId, themes }: { userId: string; themes: string }) => {
+  const contains = (await db.themes.count({ where: { userId } })) > 0
   if (contains) {
     db.themes.update({ where: { userId }, data: { themeConfig: themes } })
   } else {
@@ -22,15 +22,15 @@ export const setDBTheme = async ({ userId, themes }: { userId: string, themes: s
 }
 
 export const getDBSelectedTheme = async ({ userId }: { userId: string }): Promise<AvailableThemes> => {
-  const { selectedTheme } = await db.themes.findFirst({ where: { userId }}) ?? { dashboard: undefined }
+  const { selectedTheme } = (await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
   if (!selectedTheme) {
     return 'dark'
   }
   return selectedTheme === 'dark' ? 'dark' : 'light'
 }
 
-export const setDBSelectedTheme = async ({ userId, selectedTheme }: { userId: string, selectedTheme: string }) => {
-  const contains = await db.themes.count({ where: { userId }}) > 0
+export const setDBSelectedTheme = async ({ userId, selectedTheme }: { userId: string; selectedTheme: string }) => {
+  const contains = (await db.themes.count({ where: { userId } })) > 0
   if (contains) {
     db.themes.update({ where: { userId }, data: { selectedTheme } })
   } else {
