@@ -4,6 +4,7 @@ import { DoubleSignedSkeletonDashboard, EditDashboard, Signature, SignedSkeleton
 import { toSingleSignedDashboard, toUnsignedWidget } from '@/lib/utils'
 import { EditWidget, SignedSkeletonWidget } from '@/lib/widget-types'
 import Long from 'long'
+import { env } from '@/env.mjs'
 
 export const signDashboard = async ({ dashboard }: { dashboard: EditDashboard }): Promise<string> => {
   const skeleton: SignedSkeletonDashboard = {
@@ -60,7 +61,7 @@ const calculateSignature = ({ data }: { data: string }) => {
   const third = generateHash({ data: data.substring(Math.floor(data.length / 2), data.length - Math.floor(data.length / 4)) })
   const fourth = generateHash({ data: data.substring(Math.floor(data.length / 3), data.length - Math.floor(data.length / 5) - 1) })
   const signature = first.mul(second).mul(third).mul(fourth).add(third.mul(fourth))
-  return signature.equals(Long.fromNumber(0)) ? Long.fromNumber(1) : signature
+  return secretizeSignature({ signature: signature.equals(Long.fromNumber(0)) ? Long.fromNumber(1) : signature })
 }
 
 const generateHash = ({ data }: { data: string }) => {
@@ -72,6 +73,19 @@ const generateHash = ({ data }: { data: string }) => {
     product = product.add(long.add(long.shiftLeft(7)).shiftRight(2))
   }
   return product
+}
+
+const secretizeSignature = ({ signature }: { signature: Long }) => {
+  const secret = env.SIGNATURE_SECRET
+  if (secret.length < 10) return signature.mul(Long.fromString(secret))
+  let index = 0
+  while (index < secret.length) {
+    const nextIndex = Math.min(secret.length - index, Math.ceil(parseInt(secret[index] ?? '0') / 2) + 11) // Maximum number is 5, max digits is 17
+    const subStr = secret.substring(index, nextIndex)
+    signature = signature.mul(Long.fromString(subStr))
+    index = nextIndex
+  }
+  return signature
 }
 
 const sortObjectRecursively = (obj: any): any => {
