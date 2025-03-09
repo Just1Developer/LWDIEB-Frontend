@@ -52,6 +52,8 @@ export const verifyDashboardSignature = async ({ dashboard }: { dashboard: Doubl
   )
 }
 
+export const signString = async ({ string }: { string: string }) => calculateSignature({ data: string })
+
 const calculateSignature = ({ data }: { data: string }) => {
   const first = generateHash({ data: data.substring(0, Math.floor(data.length / 3)) })
   const second = generateHash({ data: data.substring(Math.floor(data.length / 4), Math.round(data.length / 1.5)) })

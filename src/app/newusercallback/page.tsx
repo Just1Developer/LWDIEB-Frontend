@@ -22,7 +22,7 @@ const NewUserCallbackContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const { theme } = useUserData()
+  const { theme, userId } = useUserData()
   const [localDashboard, setLocalDashboard] = useState<string | null>('loading')
 
   const [isUploading, setIsUploading] = useState(false)
@@ -53,7 +53,7 @@ const NewUserCallbackContent = () => {
       return
     }
     setIsUploading(true)
-    const response = await postDashboard({ doubleSignedDashboard: localDashboard })
+    const response = await postDashboard({ userId, doubleSignedDashboard: localDashboard })
     if (response.msg === 'Dashboard updated') {
       goHome()
       return

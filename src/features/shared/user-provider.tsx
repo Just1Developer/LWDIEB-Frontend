@@ -1,12 +1,14 @@
-import { BackendUser, default_user_data, toUser } from '@/configuration/userdata-config'
+import { BackendUser, DEFAULT_USER_DATA, toUser } from '@/configuration/userdata-config'
 import { updateSelectedTheme } from '@/features/actions/user-post'
 import { AvailableThemes, Theme, User, UserData } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import { useTheme } from 'next-themes'
 import { createContext, ReactNode, useContext, useState } from 'react'
+import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 
 interface UserContextProps {
   loaded: boolean
+  userId: string
   user: User | undefined
   userdata: UserData
   theme: Theme
@@ -26,7 +28,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       const res = await fetch('/api/user', { credentials: 'include' })
 
       if (!res.ok) {
-        return default_user_data
+        return DEFAULT_USER_DATA
       }
 
       const json = await res.json()
@@ -35,7 +37,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       setSelectedTheme(user.selectedTheme)
       return user
     } catch (error) {
-      return default_user_data
+      return DEFAULT_USER_DATA
     }
   }
 
@@ -54,12 +56,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     setSelectedTheme(theme)
   }
 
-  const data = userdata ?? default_user_data
+  const data = userdata ?? DEFAULT_USER_DATA
 
   return (
     <UserContext.Provider
       value={{
         loaded: !!userdata,
+        userId: data.user?.id ?? DEFAULT_USER_UUID,
         user: data.user,
         userdata: data,
         selectedTheme,

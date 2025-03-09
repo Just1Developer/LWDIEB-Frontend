@@ -11,6 +11,7 @@ export interface UserData {
 
 export interface User {
   name: string
+  id: string
   email: string
   admin: boolean
   language: string

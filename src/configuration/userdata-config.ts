@@ -1,7 +1,9 @@
 import { AvailableThemes, Theme, User, UserData } from '@/lib/types'
+import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 
 export interface BackendUser {
   name: string
+  id: string
   email: string
   admin: boolean
   language: string
@@ -11,6 +13,7 @@ export interface BackendUser {
 
 export const fallbackUser: User = {
   name: '?',
+  id: DEFAULT_USER_UUID,
   email: `?`,
   admin: false,
   language: 'en-US',
@@ -38,6 +41,11 @@ export const DEFAULT_DARK_THEME: Theme = {
   accentForeground: '#FFFFFF',
 }
 
+export const DEFAULT_THEMES = JSON.stringify({
+  lightTheme: DEFAULT_LIGHT_THEME,
+  darkTheme: DEFAULT_DARK_THEME
+})
+
 // Copy of Theme, but everything is optional
 interface ThemeOptional {
   // Hex
@@ -51,7 +59,7 @@ interface ThemeOptional {
   accentForeground?: string
 }
 
-export const default_user_data: UserData = {
+export const DEFAULT_USER_DATA: UserData = {
   user: undefined,
   selectedTheme: 'light',
   darkTheme: DEFAULT_DARK_THEME,
@@ -60,6 +68,7 @@ export const default_user_data: UserData = {
 
 export const toUser = ({ dataUser }: { dataUser: BackendUser }): UserData => {
   const user: User = {
+    id: dataUser.id,
     name: dataUser.name,
     email: dataUser.email,
     admin: dataUser.admin,
@@ -71,7 +80,11 @@ export const toUser = ({ dataUser }: { dataUser: BackendUser }): UserData => {
     darkTheme: ThemeOptional
   }
   try {
-    dataThemes = JSON.parse(dataUser.theme)
+    const parsed = JSON.parse(dataUser.theme)
+    dataThemes = {
+      lightTheme: parsed.darkTheme ?? DEFAULT_LIGHT_THEME,
+      darkTheme: parsed.darkTheme ?? DEFAULT_DARK_THEME
+    }
   } catch (_) {
     dataThemes = {
       lightTheme: DEFAULT_LIGHT_THEME,

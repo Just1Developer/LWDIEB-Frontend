@@ -17,6 +17,6 @@ model Dashboards {
 
 model Themes {
   userId        String @id @unique
-  themeConfig   String
-  selectedTheme String @default("{}")
+  themeConfig   String @default("{}")
+  selectedTheme String @default("dark")
 }
