@@ -19,11 +19,11 @@ export const UserDashboardLoader = ({
   setEditDashboardAction?: Dispatch<SetStateAction<EditDashboard | undefined>>
   type?: 'admin' | 'user'
 }) => {
-  const { loaded, user, userId } = useUserData()
+  const { loaded, user } = useUserData()
   const [signedSkeletonDashboard, setSignedSkeletonDashboard] = useState<SignedSkeletonDashboard | undefined>()
 
   const { data: dashboardData, refetch } = useQuery({
-    queryFn: async () => getDashboard({ userId }),
+    queryFn: async () => getDashboard(),
     queryKey: ['dashboard-client', type],
     enabled: false,
   })

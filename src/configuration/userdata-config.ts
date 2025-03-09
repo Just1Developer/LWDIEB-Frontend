@@ -11,7 +11,7 @@ export interface BackendUser {
   selectedTheme: AvailableThemes
 }
 
-export const fallbackUser: User = {
+export const FALLBACK_USER: User = {
   name: '?',
   id: DEFAULT_USER_UUID,
   email: `?`,
@@ -102,7 +102,7 @@ export const toUser = ({ dataUser }: { dataUser: BackendUser }): UserData => {
 }
 
 export const toBackendUser = ({ userdata }: { userdata: UserData }): BackendUser => {
-  const { user = fallbackUser, selectedTheme, darkTheme, lightTheme } = userdata
+  const { user = FALLBACK_USER, selectedTheme, darkTheme, lightTheme } = userdata
   return {
     ...user,
     selectedTheme,

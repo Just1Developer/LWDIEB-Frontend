@@ -2,7 +2,7 @@ import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME, fallbackUser, toBackendUser } from '@/configuration/userdata-config'
+import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME, FALLBACK_USER, toBackendUser } from '@/configuration/userdata-config'
 import { postUser } from '@/features/actions/user-post'
 import { LocationPickerProps } from '@/features/edit-dashboard/editgrid'
 import { useUserData } from '@/features/shared/user-provider'
@@ -12,7 +12,7 @@ import { Dispatch, isValidElement, ReactNode, SetStateAction, useEffect, useRef,
 import { HexColorPicker } from 'react-colorful'
 
 export const ThemeSelectorPage = () => {
-  const { user = fallbackUser, userdata, selectedTheme } = useUserData()
+  const { user = FALLBACK_USER, userdata, selectedTheme } = useUserData()
   const { darkTheme, lightTheme } = userdata
   const [currentLightTheme, setCurrentLightTheme] = useState<Theme>(lightTheme)
   const [currentBufferedLightTheme, setCurrentBufferedLightTheme] = useState<Theme>(currentLightTheme)

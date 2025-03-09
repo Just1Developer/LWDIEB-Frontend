@@ -88,7 +88,7 @@ const SIDEBAR_CLOSE_COOLDOWN = 500
 
 export const EditGrid = ({ dashboard, type = 'user' }: EditGridProps) => {
   const router = useRouter()
-  const { theme, userId } = useUserData()
+  const { theme } = useUserData()
   const [gridWidth, setGridWidth] = useState(dashboard.gridWidth)
   const [gridHeight, setGridHeight] = useState(dashboard.gridHeight)
   const [widgets, setWidgets] = useState<EditWidget[]>(dashboard.widgets)
@@ -821,7 +821,7 @@ export const EditGrid = ({ dashboard, type = 'user' }: EditGridProps) => {
     let error: string | undefined = undefined
 
     if (signedIn || type === 'admin') {
-      const response = await (type === 'admin' ? postGlobalDashboard : postDashboard)({ userId, doubleSignedDashboard: signedDashboard })
+      const response = await (type === 'admin' ? postGlobalDashboard : postDashboard)({ doubleSignedDashboard: signedDashboard })
       if (response.status !== 200) {
         error = response.error
       }
