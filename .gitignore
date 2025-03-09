@@ -54,3 +54,4 @@ tree*.py
 # Tests
 .last-run.json
 trace.zip
+test-results
