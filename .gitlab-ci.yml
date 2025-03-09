@@ -1,0 +1,34 @@
+stages:
+  - pwetty👉👈
+  - bwuild🪛👷🐩
+  #  - test
+
+build:
+  stage: bwuild🪛👷🐩
+  image: node:latest
+  script:
+    - corepack enable
+    - pnpm i
+    - pnpm build
+  only:
+    - merge_requests
+
+# Later: Tests
+
+#test:
+#  stage: test
+#  image: node:20
+#  script:
+#    - pnpm test
+#  only:
+#    - merge_requests
+
+prettier-check:
+  stage: pwetty👉👈
+  image: node:latest
+  script:
+    - corepack enable
+    - pnpm i --frozen-lockfile
+    - npx prettier --check .
+  only:
+    - merge_requests
