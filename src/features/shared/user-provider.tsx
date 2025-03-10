@@ -1,6 +1,8 @@
 import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 import { BackendUser, DEFAULT_USER_DATA, toUser } from '@/configuration/userdata-config'
 import { updateSelectedTheme } from '@/features/actions/user-post'
+import { getUserFromAccessJWT } from '@/lib/cookie-reader'
+import { getDBSelectedTheme, getDBTheme } from '@/lib/theme-db-access'
 import { AvailableThemes, Theme, User, UserData } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import { useTheme } from 'next-themes'
@@ -25,14 +27,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUser = async (): Promise<UserData | undefined> => {
     try {
-      const res = await fetch('/api/user', { credentials: 'include' })
-
-      if (!res.ok) {
-        return DEFAULT_USER_DATA
+      const jwtUser = await getUserFromAccessJWT()
+      const backendUser: BackendUser = {
+        ...jwtUser,
+        theme: await getDBTheme({ userId: jwtUser.id }),
+        selectedTheme: await getDBSelectedTheme({ userId: jwtUser.id }),
       }
 
-      const json = await res.json()
-      const user = toUser({ dataUser: json as BackendUser })
+      const user = toUser({ dataUser: backendUser })
       setNextTheme(user.selectedTheme)
       setSelectedTheme(user.selectedTheme)
       return user

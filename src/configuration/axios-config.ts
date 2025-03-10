@@ -3,7 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import { cookies } from 'next/headers'
 
 export const axiosInstance = axios.create({
-  baseURL: env.SPRING_SERVER_URL,
+  baseURL: env.LW_SERVER_URL,
   headers: {
     'Content-Type': 'application/json',
   },

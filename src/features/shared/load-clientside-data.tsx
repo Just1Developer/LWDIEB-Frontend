@@ -64,7 +64,7 @@ export const UserDashboardLoader = ({
       if (!dash) void refetch()
       else setSignedSkeletonDashboard(dash)
     })
-  }, [loaded])
+  }, [])
 
   return <></>
 }

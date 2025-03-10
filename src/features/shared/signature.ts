@@ -82,7 +82,7 @@ const secretizeSignature = ({ signature }: { signature: Long }) => {
   if (secret.length < 10) return signature.mul(Long.fromString(secret))
   let index = 0
   while (index < secret.length) {
-    const nextIndex = Math.min(secret.length - index, Math.ceil(parseInt(secret[index] ?? '0') / 2) + 11) // Maximum number is 5, max digits is 17
+    const nextIndex = index + Math.min(secret.length - index, Math.ceil(parseInt(secret[index] ?? '0') / 2) + 11) // Maximum number is 5, max digits is 17
     const subStr = secret.substring(index, nextIndex)
     signature = signature.mul(Long.fromString(subStr))
     index = nextIndex

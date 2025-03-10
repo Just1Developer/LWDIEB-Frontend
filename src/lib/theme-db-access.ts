@@ -1,10 +1,12 @@
 'use server'
 
+import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 import { DEFAULT_THEMES } from '@/configuration/userdata-config'
 import { db } from '@/lib/db'
 import { AvailableThemes } from '@/lib/types'
 
 export const getDBTheme = async ({ userId }: { userId: string }) => {
+  if (userId === DEFAULT_USER_UUID) return DEFAULT_THEMES
   const { themeConfig } = (await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
   if (!themeConfig) {
     return DEFAULT_THEMES

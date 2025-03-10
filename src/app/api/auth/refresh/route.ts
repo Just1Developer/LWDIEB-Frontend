@@ -1,9 +1,9 @@
 import { axiosInstance } from '@/configuration/axios-config'
 import { CookieSettings } from '@/configuration/cookie-settings'
-import { NextResponse } from 'next/server'
 import { buildRefreshBody } from '@/lib/keycloak-request-constructor'
+import { NextResponse } from 'next/server'
 
-const refreshPath = "/realms/kit-dashboard/protocol/openid-connect/token"
+const refreshPath = '/realms/kit-dashboard/protocol/openid-connect/token'
 
 export const GET = async () => {
   try {
