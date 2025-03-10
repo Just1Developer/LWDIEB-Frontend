@@ -1,10 +1,13 @@
 import { axiosInstance } from '@/configuration/axios-config'
 import { CookieSettings } from '@/configuration/cookie-settings'
 import { NextResponse } from 'next/server'
+import { buildRefreshBody } from '@/lib/keycloak-request-constructor'
+
+const refreshPath = "/realms/kit-dashboard/protocol/openid-connect/token"
 
 export const GET = async () => {
   try {
-    const response = await axiosInstance.get('/auth/refresh')
+    const response = await axiosInstance.postForm(refreshPath, buildRefreshBody())
     if (!response || response.status >= 500) {
       return NextResponse.json({ status: 500 })
     }
