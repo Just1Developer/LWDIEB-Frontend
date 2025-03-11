@@ -24,7 +24,7 @@ export const getUserFromAccessJWT = async (): Promise<User> => {
   }
 }
 
-export const getToken = async ({ token }: { token: string }) => decodeJWT({ token: (await cookies()).get(token)?.value })
+export const getCookieNamed = async ({ token }: { token: string }) => (await cookies()).get(token)?.value
 
 const decodeJWT = ({ token }: { token: string | undefined }) => {
   if (!token) return undefined

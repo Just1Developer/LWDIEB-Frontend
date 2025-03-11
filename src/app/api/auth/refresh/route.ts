@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/configuration/axios-config'
+import { axiosFormInstance, axiosInstance } from '@/configuration/axios-config'
 import { CookieSettings } from '@/configuration/cookie-settings'
 import { buildRefreshBody } from '@/lib/keycloak-request-constructor'
 import { NextResponse } from 'next/server'
@@ -7,14 +7,14 @@ const refreshPath = '/realms/kit-dashboard/protocol/openid-connect/token'
 
 export const GET = async () => {
   try {
-    const response = await axiosInstance.postForm(refreshPath, buildRefreshBody())
+    const response = await axiosFormInstance.post(refreshPath, await buildRefreshBody())
     if (!response || response.status >= 500) {
       return NextResponse.json({ status: 500 })
     }
 
     if (response.status !== 200) {
       // Send a logout request to the backend and thus keycloak in the background
-      void axiosInstance.get('/auth/logout')
+      void axiosInstance.get('/api/auth/logout')
       const res = NextResponse.json({ status: 302 })
       res.cookies.delete('JSESSIONID')
       res.cookies.delete('id_token')

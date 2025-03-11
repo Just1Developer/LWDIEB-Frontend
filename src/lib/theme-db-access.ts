@@ -23,10 +23,10 @@ export const setDBTheme = async ({ userId, themes }: { userId: string; themes: s
   }
 }
 
-export const getDBSelectedTheme = async ({ userId }: { userId: string }): Promise<AvailableThemes> => {
-  const { selectedTheme } = (await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
+export const getDBSelectedTheme = async ({} /*userId*/ : { userId: string }): Promise<AvailableThemes> => {
+  const { selectedTheme } = { selectedTheme: undefined } //(await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
   if (!selectedTheme) {
-    return 'dark'
+    return 'light'
   }
   return selectedTheme === 'dark' ? 'dark' : 'light'
 }

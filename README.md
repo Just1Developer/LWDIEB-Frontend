@@ -64,3 +64,15 @@ npx playwright test
 - Zod (Validation)
 - Prettier (Formatter)
 - ESLint
+
+## Some Stuff for me:
+
+```bash
+npx prisma generate
+```
+
+and
+
+```bash
+npx prisma db push
+```

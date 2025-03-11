@@ -28,6 +28,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const fetchUser = async (): Promise<UserData | undefined> => {
     try {
       const jwtUser = await getUserFromAccessJWT()
+      if (jwtUser.id === DEFAULT_USER_UUID) return DEFAULT_USER_DATA
+
       const backendUser: BackendUser = {
         ...jwtUser,
         theme: await getDBTheme({ userId: jwtUser.id }),

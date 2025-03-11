@@ -175,7 +175,7 @@ const UserProfile = ({ user, theme, sidebarOpen }: { user: User; theme: Theme; s
               Customize Themes
             </div>
           </a>
-          <a href="/auth/logout">
+          <a href="/api/auth/logout">
             <div
               className={buttonClassname}
               style={{ backgroundColor: rgba(theme.accent, 0) }}

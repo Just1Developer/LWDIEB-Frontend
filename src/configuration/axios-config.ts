@@ -10,6 +10,14 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 })
 
+export const axiosFormInstance = axios.create({
+  baseURL: env.LW_SERVER_URL,
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  withCredentials: true,
+})
+
 // Request interceptor for injecting cookie (for auth) into the request
 axiosInstance.interceptors.request.use(
   async <T>(config: InternalAxiosRequestConfig<T>): Promise<InternalAxiosRequestConfig<T>> => {
