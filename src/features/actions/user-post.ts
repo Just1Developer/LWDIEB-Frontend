@@ -17,8 +17,9 @@ export const postUser = async ({ selectedTheme, themes }: ThemeProps) => {
   const { id: userId } = await getUserFromAccessJWT()
   if (userId === DEFAULT_USER_UUID) {
     console.warn('Failed to update user themes: ID was default ID on post call.')
-    await sendWSCommand({ userId, command: COMMAND_REFRESH_THEMES })
+    return
   }
+  await sendWSCommand({ userId, command: COMMAND_REFRESH_THEMES })
   await setDBTheme({ userId: userId, themes: JSON.stringify(themes), selectedTheme })
 }
 export const updateSelectedTheme = async ({ theme }: { theme: AvailableThemes }) => {

@@ -5,6 +5,7 @@ import { AvailableThemes } from '@/lib/types'
 import { useEffect, useRef } from 'react'
 import { COMMAND_REFRESH_DASHBOARD, COMMAND_REFRESH_THEMES } from '@/configuration/ws-communication-commands'
 import { env } from '@/env.mjs'
+import { hasDBDashboard } from '@/lib/dashboard-db-access'
 
 interface SocketMessageProps {
   status?: string
@@ -13,7 +14,7 @@ interface SocketMessageProps {
 }
 
 export const SocketConnection = () => {
-  const { setThemeLocally } = useUserData()
+  const { setThemeLocally, userId } = useUserData()
   const socketRef = useRef<WebSocket | null>(null)
 
   useEffect(() => {
@@ -21,30 +22,33 @@ export const SocketConnection = () => {
     if (socketRef.current) return
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const socketUrl = `${protocol}//${env.NEXT_PUBLIC_SOCKET_HOST}/ws`
-    const socket = new WebSocket(socketUrl)
-    socketRef.current = socket
+    hasDBDashboard({ userId }).then((hasDashboard) => {
+      const socketUrl = `${protocol}//${env.NEXT_PUBLIC_SOCKET_HOST}/ws?uuid=${encodeURIComponent(userId)}&connectDefault=${hasDashboard}`
+      const socket = new WebSocket(socketUrl)
+      socketRef.current = socket
 
-    socket.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data) as SocketMessageProps
-        if (message.command === COMMAND_REFRESH_DASHBOARD || message.command === COMMAND_REFRESH_THEMES) {
-          window.location.reload()
-        }
-        if (message.selectedTheme) {
-          try {
-            setThemeLocally(message.selectedTheme)
-          } catch (_) {}
-        }
-      } catch (_) {}
-    }
+      socket.onmessage = (event) => {
+        console.log('Received message', event.data)
+        try {
+          const message = JSON.parse(event.data) as SocketMessageProps
+          if (message.command === COMMAND_REFRESH_DASHBOARD || message.command === COMMAND_REFRESH_THEMES) {
+            window.location.reload()
+          }
+          if (message.selectedTheme) {
+            try {
+              setThemeLocally(message.selectedTheme)
+            } catch (_) {}
+          }
+        } catch (_) {}
+      }
 
-    socket.onclose = () => {
-      socketRef.current = null
-    }
+      socket.onclose = () => {
+        socketRef.current = null
+      }
+    })
 
     return () => {
-      socket.close()
+      socketRef.current?.close()
       socketRef.current = null
     }
   }, [])

@@ -6,6 +6,7 @@ import { signString } from '@/features/shared/signature'
 
 export const sendWSCommand = async ({ userId, command }: { userId: string; command: string }) => {
   try {
+    console.log('Sending WS command', userId, command)
     void axiosInstance.post('/ws-post', {
       userId,
       command,

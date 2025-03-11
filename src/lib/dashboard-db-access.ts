@@ -11,6 +11,8 @@ export const getDBDashboard = async ({ userId }: { userId: string }) => {
   return dashboard
 }
 
+export const hasDBDashboard = async ({ userId }: { userId: string }) => userId !== DEFAULT_USER_UUID && !!(await db.dashboards.findFirst({ where: { userId } }))
+
 export const setDBDefaultDashboard = async ({ dashboard }: { dashboard: string }) => {
   await setDBDashboard({ userId: DEFAULT_USER_UUID, dashboard })
 }
