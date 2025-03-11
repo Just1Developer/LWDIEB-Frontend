@@ -8,6 +8,7 @@ const loginRedirectUri = '/api/auth/callback'
 const logoutPath = '/realms/kit-dashboard/protocol/openid-connect/logout'
 const logoutRedirectUri = '/api/auth/post-logout'
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const buildLoginRequestUrl = async ({ hint }: { hint: string }) => {
   return `${env.LW_SERVER_URL}${authPath}?client_id=${encodeURIComponent(env.KC_SPRING_CLIENT)}&redirect_uri=${encodeURIComponent(`${env.NEXT_URL}${loginRedirectUri}`)}&response_type=code&scope=openid&state=${new Date().getTime()}&kc_idp_hint=${hint}&prompt=login`
 }
@@ -24,6 +25,7 @@ export const buildRefreshBody = async () => {
   return `grant_type=refresh_token&client_id=${encodeURIComponent(env.KC_SPRING_CLIENT)}&client_secret=${encodeURIComponent(env.KC_SPRING_SECRET)}&refresh_token=${encodeURIComponent(refresh_token ?? 'undefined')}`
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const buildExchangeTokenBody = async ({ code }: { code: string }) => {
   return `grant_type=authorization_code&client_id=${encodeURIComponent(env.KC_SPRING_CLIENT)}&client_secret=${encodeURIComponent(env.KC_SPRING_SECRET)}&redirect_uri=${encodeURIComponent(`${env.NEXT_URL}${loginRedirectUri}`)}&code=${encodeURIComponent(code)}`
 }

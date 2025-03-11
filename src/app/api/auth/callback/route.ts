@@ -11,15 +11,13 @@ interface KeycloakCookieResponse {
 }
 
 export const GET = async (req: NextRequest) => {
-  let idToken = req.cookies.get('id_token')?.value
-  let authToken = req.cookies.get('access_token')?.value
-  let refreshToken = req.cookies.get('refresh_token')?.value
+  let idToken: string | undefined
+  let authToken: string | undefined
+  let refreshToken: string | undefined
 
   const HOST = extractHost({ req })
 
   try {
-    console.log('code', req.nextUrl.searchParams.get('code'))
-    console.log('final url', await buildExchangeTokenBody({ code: req.nextUrl.searchParams.get('code') ?? '' }))
     const { data } = await axiosFormInstance.post(
       '/realms/kit-dashboard/protocol/openid-connect/token',
       await buildExchangeTokenBody({ code: req.nextUrl.searchParams.get('code') ?? '' }),
@@ -30,17 +28,9 @@ export const GET = async (req: NextRequest) => {
     refreshToken = refresh_token
   } catch (_) {
     console.error('Failed to exchange code for tokens.')
-    console.error(_)
     return NextResponse.redirect(HOST)
   }
-  console.log('HOST', HOST)
-  console.log('req', req)
-  console.log('req headers', req.headers)
-  console.log('req cookies', req.cookies)
-  console.log('id', idToken)
-  console.log('auth', authToken)
 
-  console.log('refresh', refreshToken)
   if (!idToken || !authToken || !refreshToken) {
     console.error('Error while retrieving access or refresh token')
     return NextResponse.redirect(HOST)

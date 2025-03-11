@@ -1,11 +1,11 @@
 'use client'
 
-import { useUserData } from '@/features/shared/user-provider'
-import { AvailableThemes } from '@/lib/types'
-import { useEffect, useRef } from 'react'
 import { COMMAND_REFRESH_DASHBOARD, COMMAND_REFRESH_THEMES } from '@/configuration/ws-communication-commands'
 import { env } from '@/env.mjs'
+import { useUserData } from '@/features/shared/user-provider'
 import { hasDBDashboard } from '@/lib/dashboard-db-access'
+import { AvailableThemes } from '@/lib/types'
+import { useEffect, useRef } from 'react'
 
 interface SocketMessageProps {
   status?: string
@@ -28,7 +28,6 @@ export const SocketConnection = () => {
       socketRef.current = socket
 
       socket.onmessage = (event) => {
-        console.log('Received message', event.data)
         try {
           const message = JSON.parse(event.data) as SocketMessageProps
           if (message.command === COMMAND_REFRESH_DASHBOARD || message.command === COMMAND_REFRESH_THEMES) {

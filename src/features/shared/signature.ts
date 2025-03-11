@@ -57,7 +57,7 @@ export const verifyDashboardSignature = async ({ dashboard }: { dashboard: Doubl
 // eslint-disable-next-line @typescript-eslint/require-await
 export const signString = async ({ string }: { string: string }) => {
   const signature = calculateSignature({ data: string })
-  return signature.getHighBitsUnsigned() + "#" + signature.getLowBitsUnsigned()
+  return `${signature.getHighBitsUnsigned()}#${signature.getLowBitsUnsigned()}`
 }
 
 const calculateSignature = ({ data }: { data: string }) => {
