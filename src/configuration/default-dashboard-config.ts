@@ -1,4 +1,4 @@
-export const DEFAULT_USER_UUID = '000000000-00000-0000000'
+export const DEFAULT_USER_UUID = '00000000-0000-0000-0000-000000000000'
 
 export const DEFAULT_DASHBOARD = JSON.stringify({
   gridHeight: 9,

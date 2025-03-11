@@ -55,7 +55,10 @@ export const verifyDashboardSignature = async ({ dashboard }: { dashboard: Doubl
 
 // We need async for exporting because this file has 'use server'
 // eslint-disable-next-line @typescript-eslint/require-await
-export const signString = async ({ string }: { string: string }) => calculateSignature({ data: string })
+export const signString = async ({ string }: { string: string }) => {
+  const signature = calculateSignature({ data: string })
+  return signature.getHighBitsUnsigned() + "#" + signature.getLowBitsUnsigned()
+}
 
 const calculateSignature = ({ data }: { data: string }) => {
   const first = generateHash({ data: data.substring(0, Math.floor(data.length / 3)) })

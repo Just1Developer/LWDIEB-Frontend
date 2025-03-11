@@ -12,6 +12,7 @@ export const env = createEnv({
   },
   client: {
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string(),
+    NEXT_PUBLIC_SOCKET_HOST: z.string(),
   },
   runtimeEnv: {
     SIGNATURE_SECRET: process.env.SIGNATURE_SECRET,
@@ -21,5 +22,6 @@ export const env = createEnv({
     KC_SPRING_CLIENT: process.env.KC_SPRING_CLIENT,
     KC_SPRING_SECRET: process.env.KC_SPRING_SECRET,
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    NEXT_PUBLIC_SOCKET_HOST: process.env.NEXT_PUBLIC_SOCKET_HOST,
   },
 })

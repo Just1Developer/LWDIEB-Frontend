@@ -1,6 +1,8 @@
 'use server'
 
 import { DEFAULT_DASHBOARD, DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
+import { COMMAND_REFRESH_DASHBOARD } from '@/configuration/ws-communication-commands'
+import { sendWSCommand } from '@/features/actions/websockets'
 import { getUserFromAccessJWT } from '@/lib/cookie-reader'
 import { getDBDashboard, getDBDefaultDashboard, removeDBDashboard, setDBDashboard, setDBDefaultDashboard } from '@/lib/dashboard-db-access'
 import { DoubleSignedSkeletonDashboard, SignedSkeletonDashboard } from '@/lib/types'
@@ -40,6 +42,7 @@ export const postDashboard = async ({ doubleSignedDashboard }: { doubleSignedDas
     return { status: 401, error: 'You are probably not logged in.', msg: '' }
   }
   await setDBDashboard({ userId, dashboard: doubleSignedDashboard })
+  await sendWSCommand({ userId, command: COMMAND_REFRESH_DASHBOARD })
   return { status: 200, error: 'ok', msg: 'ok' }
 }
 
@@ -52,18 +55,16 @@ export const postGlobalDashboard = async ({ doubleSignedDashboard }: { doubleSig
   } else if (!admin) {
     return { status: 403, error: 'You have no permission to update the global dashboard! You are probably not logged in.', msg: '' }
   }
-  try {
-    await setDBDefaultDashboard({ dashboard: doubleSignedDashboard })
-    return { status: 200, error: 'ok', msg: 'ok' }
-  } catch (error) {
-    return { status: 401, error: 'An unknown error occurred (axios fault)', msg: '' }
-  }
+  await setDBDefaultDashboard({ dashboard: doubleSignedDashboard })
+  await sendWSCommand({ userId: DEFAULT_USER_UUID, command: COMMAND_REFRESH_DASHBOARD })
+  return { status: 200, error: 'ok', msg: 'ok' }
 }
 
 export const eraseDashboard = async (): Promise<SignedSkeletonDashboard> => {
   const { id: userId } = await getUserFromAccessJWT()
   if (userId !== DEFAULT_USER_UUID) {
     await removeDBDashboard({ userId })
+    await sendWSCommand({ userId, command: COMMAND_REFRESH_DASHBOARD })
   } else {
     console.warn('Failed to erase dashboard: ID was default ID on regular post call.')
   }
