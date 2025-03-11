@@ -1,14 +1,14 @@
 'use server'
 
+import { axiosFormInstance } from '@/configuration/axios-config'
 import { DEFAULT_USER_UUID } from '@/configuration/default-dashboard-config'
 import { UserThemes } from '@/configuration/userdata-config'
 import { COMMAND_REFRESH_THEMES } from '@/configuration/ws-communication-commands'
 import { sendWSCommand } from '@/features/actions/websockets'
 import { getUserFromAccessJWT } from '@/lib/cookie-reader'
+import { buildRefreshBody } from '@/lib/keycloak-request-constructor'
 import { setDBSelectedTheme, setDBTheme } from '@/lib/theme-db-access'
 import { AvailableThemes } from '@/lib/types'
-import { axiosFormInstance } from '@/configuration/axios-config'
-import { buildRefreshBody } from '@/lib/keycloak-request-constructor'
 
 interface ThemeProps {
   selectedTheme: AvailableThemes
@@ -36,6 +36,6 @@ export const updateSelectedTheme = async ({ theme }: { theme: AvailableThemes })
 
 export const sendRefreshRequest = async () => {
   try {
-    return await axiosFormInstance.post('/realms/kit-dashboard/protocol/openid-connect/token', await buildRefreshBody());
-  } catch (_) { }
+    return await axiosFormInstance.post('/realms/kit-dashboard/protocol/openid-connect/token', await buildRefreshBody())
+  } catch (_) {}
 }

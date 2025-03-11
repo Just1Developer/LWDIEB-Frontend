@@ -1,8 +1,8 @@
 import { axiosInstance } from '@/configuration/axios-config'
 import { CookieSettings } from '@/configuration/cookie-settings'
-import { NextResponse } from 'next/server'
 import { sendRefreshRequest } from '@/features/actions/user-post'
 import { areTokensExpired } from '@/lib/cookie-reader'
+import { NextResponse } from 'next/server'
 
 export const GET = async () => {
   try {
