@@ -32,3 +32,17 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error)
   },
 )
+
+axiosFormInstance.interceptors.request.use(
+  async <T>(config: InternalAxiosRequestConfig<T>): Promise<InternalAxiosRequestConfig<T>> => {
+    // Retrieve and inject cookies for the current request
+    const cookieHeader = (await cookies()).toString()
+    if (cookieHeader) {
+      config.headers.Cookie = cookieHeader
+    }
+    return config
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error)
+  },
+)

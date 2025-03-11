@@ -7,6 +7,8 @@ import { sendWSCommand } from '@/features/actions/websockets'
 import { getUserFromAccessJWT } from '@/lib/cookie-reader'
 import { setDBSelectedTheme, setDBTheme } from '@/lib/theme-db-access'
 import { AvailableThemes } from '@/lib/types'
+import { axiosFormInstance } from '@/configuration/axios-config'
+import { buildRefreshBody } from '@/lib/keycloak-request-constructor'
 
 interface ThemeProps {
   selectedTheme: AvailableThemes
@@ -22,6 +24,7 @@ export const postUser = async ({ selectedTheme, themes }: ThemeProps) => {
   await sendWSCommand({ userId, command: COMMAND_REFRESH_THEMES })
   await setDBTheme({ userId: userId, themes: JSON.stringify(themes), selectedTheme })
 }
+
 export const updateSelectedTheme = async ({ theme }: { theme: AvailableThemes }) => {
   const { id: userId } = await getUserFromAccessJWT()
   if (userId === DEFAULT_USER_UUID) {
@@ -29,4 +32,10 @@ export const updateSelectedTheme = async ({ theme }: { theme: AvailableThemes })
   }
   await setDBSelectedTheme({ userId: userId, selectedTheme: theme })
   await sendWSCommand({ userId, command: theme })
+}
+
+export const sendRefreshRequest = async () => {
+  try {
+    return await axiosFormInstance.post('/realms/kit-dashboard/protocol/openid-connect/token', await buildRefreshBody());
+  } catch (_) { }
 }

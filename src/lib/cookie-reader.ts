@@ -23,6 +23,12 @@ export const getUserFromAccessJWT = async (): Promise<User> => {
   }
 }
 
+export const areTokensExpired = async () => {
+  const exp = decodeJWT({ token: await getCookieNamed({ token: 'refresh_token' }) })?.exp
+  if (!exp) return true
+  return Date.now() > new Date(exp * 1000).getTime()
+}
+
 export const getCookieNamed = async ({ token }: { token: string }) => (await cookies()).get(token)?.value
 
 const decodeJWT = ({ token }: { token: string | undefined }) => {
