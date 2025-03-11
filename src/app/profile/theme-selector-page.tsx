@@ -2,7 +2,7 @@ import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME, FALLBACK_USER, toBackendUser } from '@/configuration/userdata-config'
+import { DEFAULT_DARK_THEME, DEFAULT_LIGHT_THEME, FALLBACK_USER, UserThemes } from '@/configuration/userdata-config'
 import { postUser } from '@/features/actions/user-post'
 import { LocationPickerProps } from '@/features/edit-dashboard/editgrid'
 import { useUserData } from '@/features/shared/user-provider'
@@ -33,13 +33,11 @@ export const ThemeSelectorPage = () => {
 
   const saveUserData = () => {
     setIsSaving(true)
-    const newUserData = {
-      ...userdata,
+    const themes: UserThemes = {
       darkTheme: currentBufferedDarkTheme,
       lightTheme: currentBufferedLightTheme,
     }
-    const newUser = toBackendUser({ userdata: newUserData })
-    postUser({ user: newUser }).then(() => {
+    postUser({ selectedTheme, themes }).then(() => {
       window.location.reload()
       setIsSaving(false)
     })

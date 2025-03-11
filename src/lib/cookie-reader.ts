@@ -13,8 +13,7 @@ export const getUserFromAccessJWT = async (): Promise<User> => {
   // It's fine
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const isAdmin = (accessToken?.realm_access?.roles?.includes('admin') as boolean) ?? fallbackAdmin
-  console.log('access_token: (cookie-reader.ts)', accessToken)
-
+  
   return {
     id: accessToken.sub ?? fallbackId,
     name: accessToken.name ?? fallbackName,

@@ -11,6 +11,11 @@ export interface BackendUser {
   selectedTheme: AvailableThemes
 }
 
+export interface UserThemes {
+  lightTheme: Theme
+  darkTheme: Theme
+}
+
 export const FALLBACK_USER: User = {
   name: '?',
   id: DEFAULT_USER_UUID,
@@ -82,7 +87,7 @@ export const toUser = ({ dataUser }: { dataUser: BackendUser }): UserData => {
   try {
     const parsed = JSON.parse(dataUser.theme)
     dataThemes = {
-      lightTheme: parsed.darkTheme ?? DEFAULT_LIGHT_THEME,
+      lightTheme: parsed.lightTheme ?? DEFAULT_LIGHT_THEME,
       darkTheme: parsed.darkTheme ?? DEFAULT_DARK_THEME,
     }
   } catch (_) {
@@ -98,18 +103,6 @@ export const toUser = ({ dataUser }: { dataUser: BackendUser }): UserData => {
     selectedTheme,
     darkTheme: parseTheme({ parsed: dataThemes.darkTheme, fallback: DEFAULT_DARK_THEME }),
     lightTheme: parseTheme({ parsed: dataThemes.lightTheme, fallback: DEFAULT_LIGHT_THEME }),
-  }
-}
-
-export const toBackendUser = ({ userdata }: { userdata: UserData }): BackendUser => {
-  const { user = FALLBACK_USER, selectedTheme, darkTheme, lightTheme } = userdata
-  return {
-    ...user,
-    selectedTheme,
-    theme: JSON.stringify({
-      darkTheme: darkTheme,
-      lightTheme: lightTheme,
-    }),
   }
 }
 

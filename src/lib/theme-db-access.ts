@@ -14,17 +14,17 @@ export const getDBTheme = async ({ userId }: { userId: string }) => {
   return themeConfig
 }
 
-export const setDBTheme = async ({ userId, themes }: { userId: string; themes: string }) => {
+export const setDBTheme = async ({ userId, themes, selectedTheme }: { userId: string, themes: string, selectedTheme: AvailableThemes }) => {
   const contains = (await db.themes.count({ where: { userId } })) > 0
   if (contains) {
-    db.themes.update({ where: { userId }, data: { themeConfig: themes } })
+    await db.themes.update({ where: { userId }, data: { themeConfig: themes } })
   } else {
-    db.themes.create({ data: { userId, themeConfig: themes } })
+    await db.themes.create({ data: { userId, themeConfig: themes, selectedTheme } })
   }
 }
 
-export const getDBSelectedTheme = async ({} /*userId*/ : { userId: string }): Promise<AvailableThemes> => {
-  const { selectedTheme } = { selectedTheme: undefined } //(await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
+export const getDBSelectedTheme = async ({ userId } : { userId: string }): Promise<AvailableThemes> => {
+  const { selectedTheme } = (await db.themes.findFirst({ where: { userId } })) ?? { dashboard: undefined }
   if (!selectedTheme) {
     return 'light'
   }
@@ -34,8 +34,8 @@ export const getDBSelectedTheme = async ({} /*userId*/ : { userId: string }): Pr
 export const setDBSelectedTheme = async ({ userId, selectedTheme }: { userId: string; selectedTheme: string }) => {
   const contains = (await db.themes.count({ where: { userId } })) > 0
   if (contains) {
-    db.themes.update({ where: { userId }, data: { selectedTheme } })
+    await db.themes.update({ where: { userId }, data: { selectedTheme } })
   } else {
-    db.themes.create({ data: { userId, themeConfig: DEFAULT_THEMES, selectedTheme } })
+    await db.themes.create({ data: { userId, themeConfig: DEFAULT_THEMES, selectedTheme } })
   }
 }

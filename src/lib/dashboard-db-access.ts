@@ -18,16 +18,16 @@ export const setDBDefaultDashboard = async ({ dashboard }: { dashboard: string }
 export const setDBDashboard = async ({ userId, dashboard }: { userId: string; dashboard: string }) => {
   const contains = (await db.dashboards.count({ where: { userId } })) > 0
   if (contains) {
-    db.dashboards.update({ where: { userId }, data: { dashboard } })
+    await db.dashboards.update({ where: { userId }, data: { dashboard } })
   } else {
-    db.dashboards.create({ data: { userId, dashboard } })
+    await db.dashboards.create({ data: { userId, dashboard } })
   }
 }
 
 export const getDBDefaultDashboard = async () => {
   const { dashboard } = (await db.dashboards.findFirst({ where: { userId: DEFAULT_USER_UUID } })) ?? { dashboard: undefined }
   if (!dashboard) {
-    db.dashboards.create({ data: { userId: DEFAULT_USER_UUID, dashboard: DEFAULT_DASHBOARD } })
+    await db.dashboards.create({ data: { userId: DEFAULT_USER_UUID, dashboard: DEFAULT_DASHBOARD } })
     return DEFAULT_DASHBOARD
   }
   return dashboard
