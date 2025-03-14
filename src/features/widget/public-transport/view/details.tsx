@@ -53,7 +53,7 @@ export const PublicTransportWidgetView =
     }
 
     const getTextColor = (train: string) => {
-      if (train.match(/^(?:4|S[57])/g)) return rgba('#1e1e1e', 0.9)
+      if (train.match(/^(?:[49]|S[57])/g)) return rgba('#1e1e1e', 0.9)
       else if (train.startsWith('Flix') || train.startsWith('S9')) return '#ffffff'
       else if (train.match(/^S?\d\d?$/g)) return '#efefef'
       return theme.foregroundText
@@ -61,7 +61,8 @@ export const PublicTransportWidgetView =
 
     const formatName = (name: string) => {
       return name
-        .replaceAll(/Straßenbahn|S-Bahn|Ersatzverkehr|Einsatzwagen|\(Sondertarif\) |R-Bahn|(\n)/g, '')
+        .replaceAll(/Straßenbahn|S-Bahn|Metropolexpress|Einsatzwagen|\(Sondertarif\) |R-Bahn|(\n)/g, '')
+        .replace(/(Schienen)[Ee]rsatz(verkehr|bus)/g, '(Bus)')
         .replace('Flixbus', 'Flix')
         .replace('Regionalb', 'Regio B')
         .replace('Stadtbus', 'Bus ')
