@@ -11,7 +11,8 @@ export const env = createEnv({
     KC_SPRING_SECRET: z.string(),
   },
   client: {
-    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string(),
+    NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY: z.string(),
+    NEXT_PUBLIC_GOOGLE_MAPS_JS_API_KEY: z.string(),
     NEXT_PUBLIC_SOCKET_HOST: z.string(),
   },
   runtimeEnv: {
@@ -21,7 +22,8 @@ export const env = createEnv({
     SPRING_SERVER_PASSWORD: process.env.SPRING_SERVER_PASSWORD,
     KC_SPRING_CLIENT: process.env.KC_SPRING_CLIENT,
     KC_SPRING_SECRET: process.env.KC_SPRING_SECRET,
-    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_API_KEY,
+    NEXT_PUBLIC_GOOGLE_MAPS_JS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_JS_API_KEY,
     NEXT_PUBLIC_SOCKET_HOST: process.env.NEXT_PUBLIC_SOCKET_HOST,
   },
 })

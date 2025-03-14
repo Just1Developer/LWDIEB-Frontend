@@ -166,7 +166,7 @@ export const EditGrid = ({ dashboard, type = 'user' }: EditGridProps) => {
   useEffect(() => {
     if (!dialog || React.isValidElement(dialog) || (dialog as LocationPickerProps).type !== 'location picker') return
     const { onLocationPicked, longitude, latitude, zoom, onAnyClose } = dialog as LocationPickerProps
-    if (googleMapsApiKey === '') setGoogleMapsApiKey(env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)
+    if (googleMapsApiKey === '') setGoogleMapsApiKey(env.NEXT_PUBLIC_GOOGLE_MAPS_JS_API_KEY)
     setDialog(
       <EmbeddedMapSelectorDialogGoogle
         onLocationSelectedAction={onLocationPicked}
